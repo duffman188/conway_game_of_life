@@ -35,19 +35,35 @@ initialize_grid_static(): Optionally, you could create this function to initiali
 #include "arrays.h"
 #include "utils.h"
 
-// Function prototypes
-void print_usage();
-
 int main(int argc, char *argv[]) {
-   
     if (argc != 4) {
-        print_usage();
+        printf("Usage: ./executable width height generations\n");
         return 1;
     }
-      // Allocate memory for the grid
-     // Initialize the grid with random values (you can modify to static patterns if needed)
-     // Simulate for the specified number of generations
-   
-    
+
+    int width = atoi(argv[1]);
+    int height = atoi(argv[2]);
+    int generations = atoi(argv[3]);
+
+    // Allocate memory for the grid
+    bool **grid = malloc_2d(width, height);
+    if (grid == NULL) {
+        printf("Memory allocation failed\n");
+        return 1;
+    }
+
+    // Initialize the grid (can be random or static)
+    initialize_grid_static(grid, width, height);  // Or use initialize_grid_random(grid, width, height);
+
+    // Run the game of life for the given number of generations
+    for (int gen = 1; gen <= generations; gen++) {
+        printf("Generation %d:\n", gen);
+        print_grid(grid, width, height);
+        next_generation(grid, width, height);
+    }
+
+    // Free allocated memory
+    free_2d(grid, height);
+
     return 0;
 }
