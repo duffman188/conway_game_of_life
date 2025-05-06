@@ -22,23 +22,24 @@ compare_output() {
     fi
 }
 
-# Test 1: Run with a 5x5 grid, 5 generations (expected final grid pattern)
+## Test 1: Run with a 5x5 grid, 5 generations (expected final grid pattern)
 echo "Test 1: Running with a 5x5 grid, 5 generations"
-output=$(./game_of_life 5 5 5 | tail -n 5)  # Only get the last 5 lines (the grid after 5 generations)
+output=$(./game_of_life 5 5 5 | awk '/Generation 5:/,0' | tail -n +2 | head -n 5)
 
 # Expected grid pattern after 5 generations
-expected_output="..... ..... ..... ..X.X ...XX"
+expected_output=".....
+..X..
+...X.
+.XXX.
+....."
+
 
 echo "$output"
 compare_output "$output" "$expected_output"
 
-# Test 2: Run with a 5x5 grid, 0 generations (grid should remain unchanged)
 echo "Test 2: Running with a 5x5 grid, 0 generations"
-output=$(./game_of_life 5 5 0 | tail -n 5)  # Only get the last 5 lines (the grid after 0 generations)
-
-# Initial grid before any generations
+output=$(./game_of_life 5 5 0 2>&1)  # Capture stderr too
 expected_output="Error: Width, height, and generations must be positive integers."
-
 echo "$output"
 compare_output "$output" "$expected_output"
 
@@ -51,15 +52,12 @@ compare_output "$output" "$expected_output"
 
 # Test 4: Run with a 5x5 grid and 20 generations (testing a larger number of generations)
 echo "Test 4: Running with a 5x5 grid, 20 generations"
-output=$(./game_of_life 5 5 20 | tail -n 5)  # Get the last 5 lines (grid after 20 generations)
-
-# Expected output (adjust based on pattern)
+output=$(./game_of_life 5 5 20 | awk '/Generation 20:/,0' | tail -n +2 | head -n 5)
 expected_output=".....
 .....
 .....
 ...XX
 ...XX"
-
 echo "$output"
 compare_output "$output" "$expected_output"
 

@@ -13,15 +13,19 @@ void initialize_grid_random(bool **grid, int width, int height) {
 }
 
 void initialize_grid_static(bool **grid, int width, int height) {
-    // Initialize the grid to a known static pattern (e.g., a simple "blinker" pattern)
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            grid[i][j] = 0;  // Start with all dead cells
+            grid[i][j] = false;
         }
     }
 
-    // Example: Create a blinker pattern (a vertical line of three live cells)
-    grid[1][1] = 1;
-    grid[1][2] = 1;
-    grid[1][3] = 1;
+    // Glider pattern in top-left corner
+    if (height >= 3 && width >= 3) {
+        grid[0][1] = true;
+        grid[1][2] = true;
+        grid[2][0] = true;
+        grid[2][1] = true;
+        grid[2][2] = true;
+    }
 }
+
